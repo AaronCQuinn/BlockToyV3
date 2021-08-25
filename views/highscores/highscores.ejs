@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <title>BlockToy Highscores</title>
+    <link rel="stylesheet" href="highscores-style.css">
+</head>
+
+<body>
+    <div id="highscoresGrid">
+        <div id="highscoresTitle">BlockToy Highscores</div>
+        <div id="homeButton"><a href="/">Home</a></div>
+        <table id="highscoreTable"></table>
+    </div>
+
+    <table id="highscoreTable"> 
+        <tr>
+            <th>Names</th>
+            <th>Completion Time</th>
+        </tr>
+        <% names.forEach((name, idx) => { %>
+            <tr>
+                <td>
+                <%= name %>
+                </td>
+                <td>
+                    <%= times[idx] %>
+                </td>
+            </tr>
+        <% }) %>
+    </table>
+
+</body>
+</html>

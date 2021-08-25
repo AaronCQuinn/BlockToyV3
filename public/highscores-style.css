@@ -1,0 +1,49 @@
+body {
+    margin: 0;
+    background-image: linear-gradient(to bottom right, #C2FFC2, #E5FFE5);
+}
+
+/* Main page layout */
+
+.highscoresGrid {
+    height: 100%;
+    display: grid;
+    grid-template-areas:  
+    ". highscoresTitle ."
+    ". homeButton ."
+    ". highscoreTableDiv ."   
+}
+
+#highscoresTitle {
+    grid-area: highscoresTitle;
+    font-family: 'Lobster', 'Times New Roman';
+    font-size: 7vh;
+    text-align: center;
+}
+
+#homeButton {
+    grid-area: homeButton;
+    font-family: 'Lobster', 'Times New Roman';
+    text-align: center;
+}
+
+/* Highscore Table */
+
+#highscoreTable {
+    grid-area: highscoreTable;
+    font-family: 'Lobster', 'Times New Roman';
+    margin: auto;
+    width:40%;
+    margin: auto;
+    padding-top: 2vh;
+}
+
+td,th {
+    border: 1px solid #dddddd;
+    text-align:center;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/underscore@1.13.1/underscore-umd-min.js"></script>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="/style.css">
+    <title>Aaron's Block Toy V3</title>
+</head>
+
+<body>
+    <div id="toyTitle">Aaron's Block Toy V3</div>
+    <% if (name) { %>
+        <div id="nameWelcome">Welcome, <%= name %></div>
+    <% } %>
+    <div id="redirectLinks">
+        <a href="/highscores">Highscores ● </a>
+        <a href="/login">Login</a>
+    </div>
+    <div id="gameContainer">
+        <div id="leftArrows">
+            <div id="leftArrow0" class="leftArrow"></div>
+            <div id="leftArrow1" class="leftArrow"></div>
+            <div id="leftArrow2" class="leftArrow"></div>
+        </div>
+        <div id="blocks"></div>
+        <div id="rightArrows">
+            <div id="rightArrow0" class="rightArrow"></div>
+            <div id="rightArrow1" class="rightArrow"></div>
+            <div id="rightArrow2" class="rightArrow"></div>
+        </div>
+    </div>
+    <div id="stopwatch">00:00:00</div>
+    <% if (auth) { %>
+        <button id="submitButton" type='button' class="btn btn-dark" onclick="authedSubmit()">Submit</button>
+    <% } else { %>
+        <button id="submitButton" type='button' class="btn btn-dark" onclick="noAuthSubmit()">Submit</button>
+    <% } %>
+    <div id="winText"></div>
+    <div id="instructionsContainer">
+        <p id="instructionsTitle">Instructions</p>
+            <p>1. Align the columns with three of the same colour tiles.</p>
+            <p>2. End the last column with the two grey and empty tile.</p>
+            <p>3. Use the side arrows to rotate each row.</p>
+            <p>4. The up and down arrows indicate valid vertical moves.</p>
+            <p>5. The timer starts when you make the first move, good luck!</p>
+</div>
+
+</body>
+<script src="blockToyV2.js"></script>
+<script> 
+    $(document).ready( function() {
+        $("#winText").hide();
+        $('#submitButton').prop('disabled',true);
+    });
+
+    function authedSubmit() {
+        if ($('#nameSubmit').val() == '') {
+        alert('You must include a name to be submitted!')
+        }
+        else if ($('#nameSubmit').val().length <= 2) {
+            alert("Name entered is of 2 or less characters, please reenter.")
+        }
+        else if (!gameSolved) {
+            alert("You can't submit the game without completing it first!");
+        }
+        $.ajax({
+            url: '/highscore',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({'name': $('#nameSubmit').val(), 'score': $('#stopwatch').html()})
+        })
+        alert("Your submission has been submitted to the highscores!")
+        $('#submitButton').prop('disabled',true);
+    }
+
+    function noAuthSubmit() {
+        $('#submitButton').prop('disabled',true);
+        $('#winText').fadeOut(500);
+        setTimeout(() => {        
+            $('#winText').html('An account is needed to submit to the highscore. You will be redirected in 5...');
+            $('#winText').fadeIn(500);
+        }, 500);
+        setTimeout(() => {        
+            location.replace('/registration');
+        }, 5000);
+    }
+</script>
+</html>
