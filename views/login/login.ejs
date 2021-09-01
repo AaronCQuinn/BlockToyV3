@@ -23,8 +23,14 @@
                     <div id="regDirect">No account?<a href="/registration"> Register here</a></div>
             </div>
         </div>
-    </div>
 
+    </div>
+    
+    <% if (message.length > 0) { %>
+        <div id="login-fail-message">
+            <%= message %>
+        </div>
+    <% } else {}%>
 
 
 </body>

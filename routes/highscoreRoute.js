@@ -12,13 +12,30 @@ const isAuth = (req, res, next) => {
     }
 }
 
+function formatTime(time) {
+    let diffInHours = time / 3600;
+    hrText = Math.floor(diffInHours);
+
+    let diffInMin = (diffInHours - hrText) * 60;
+    minText = Math.floor(diffInMin);
+
+    let diffInSec = (diffInMin - minText) * 60;
+    secText = Math.floor(diffInSec);
+
+    hrText = hrText.toString().padStart(2, "0");
+    minText = minText.toString().padStart(2, "0");
+    secText = secText.toString().padStart(2, "0");
+
+    return (hrText + ":" + minText + ":" + secText);
+}
+
 router.get('/highscores', isAuth, async (req, res) => {
-    let getHighscores = await Highscore.find({});
+    let getHighscores = await Highscore.find({}).sort({completionTime: 'asc'});
     let nameArray = [];
     let timeArray = [];
        for (let i = 0; i < getHighscores.length; i++) {
             nameArray.push(getHighscores[i].firstName);
-            timeArray.push(getHighscores[i].completionTime);
+            timeArray.push(formatTime(getHighscores[i].completionTime));
        };
     res.render(path.resolve('./views/highscores/highscores'), {names: nameArray, times: timeArray});
 });
@@ -32,7 +49,6 @@ router.post('/highscore', (req, res) => {
     });
     highscore.save()
         .then((result) => {
-            res.send(result);
             console.log('Highscore saved.');
         })
         .catch((error) => {

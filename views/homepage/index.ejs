@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/underscore@1.13.1/underscore-umd-min.js"></script>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
@@ -16,7 +17,7 @@
 <body>
     <div id="toyTitle">Aaron's Block Toy V3</div>
     <% if (name) { %>
-        <div id="nameWelcome">Welcome, <%= name %></div>
+        <div id="nameWelcome">Welcome, <div id='name'><%= name %></div></div>
     <% } %>
     <div id="redirectLinks">
         <a href="/highscores">Highscores ● </a>
@@ -59,21 +60,23 @@
         $('#submitButton').prop('disabled',true);
     });
 
+    function scoreToSeconds() {
+        let time = $('#stopwatch').html();
+        let hour = parseInt((time.slice(0,2) * 3600));
+        let mins = parseInt((time.slice(3,5) * 60));
+        let secs = parseInt(time.slice(6,8));
+        return (hour + mins + secs);
+    }
+
     function authedSubmit() {
-        if ($('#nameSubmit').val() == '') {
-        alert('You must include a name to be submitted!')
-        }
-        else if ($('#nameSubmit').val().length <= 2) {
-            alert("Name entered is of 2 or less characters, please reenter.")
-        }
-        else if (!gameSolved) {
+        if (!gameSolved) {
             alert("You can't submit the game without completing it first!");
         }
         $.ajax({
             url: '/highscore',
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({'name': $('#nameSubmit').val(), 'score': $('#stopwatch').html()})
+            data: JSON.stringify({'name': $('#name').html(), 'score': scoreToSeconds()})
         })
         alert("Your submission has been submitted to the highscores!")
         $('#submitButton').prop('disabled',true);
@@ -82,10 +85,12 @@
     function noAuthSubmit() {
         $('#submitButton').prop('disabled',true);
         $('#winText').fadeOut(500);
+
         setTimeout(() => {        
-            $('#winText').html('An account is needed to submit to the highscore. You will be redirected in 5...');
+            $('#winText').html(`An account is needed to submit to the highscore. You will be redirected in 5...`);
             $('#winText').fadeIn(500);
         }, 500);
+
         setTimeout(() => {        
             location.replace('/registration');
         }, 5000);

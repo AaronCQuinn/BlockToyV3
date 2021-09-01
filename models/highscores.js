@@ -7,7 +7,7 @@ const highscoreSchema = new Schema({
         required: true
     },
     completionTime: {
-        type: String,
+        type: Number,
         required: true
     }
 }, {timestamps: true});

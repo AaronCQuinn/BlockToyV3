@@ -19,9 +19,9 @@ router.post('/registration', async (req, res) => {
     let newUser = await userRegistration.findOne({username});
 
     if (newUser) {
-        console.log('Username already exists in database, redirecting to registration page.');
-        return res.redirect('registration');
-    } 
+        req.flash('message', "User already exists, please choose a different username.")
+        res.redirect('/registration');
+    } else {
 
     let saltHash = genPassword(password);
     let salt = saltHash.salt;
@@ -36,15 +36,16 @@ router.post('/registration', async (req, res) => {
     newUser.save()
         .then((result) =>{
             console.log('New user added to the database.');
-            res.render('./views/registration/registration');
+            res.redirect('/login');
         })
         .catch((err) => {
             console.log('Error registering user to database: ' + err);
         })
+    }
 });
 
 router.get('/registration', (req, res) => {
-    res.render(path.resolve('./views/registration/registration'));
+    res.render(path.resolve('./views/registration/registration'), {message: req.flash('message')});
 });
 
 module.exports = router;
