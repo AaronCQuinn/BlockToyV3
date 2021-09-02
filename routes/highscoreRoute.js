@@ -1,9 +1,11 @@
+// Imports for this route.
 const express = require('express');
 const path = require('path');
 const router = express.Router();
 const Highscore = require('../models/highscores');
 router.use(express.urlencoded());
 
+// Checks if authentication is present on the express session.
 const isAuth = (req, res, next) => {
     if (req.session.isAuth) {
         next();
@@ -12,6 +14,8 @@ const isAuth = (req, res, next) => {
     }
 }
 
+// Highscore times are stored as seconds in the database, for ascending order purposes.
+// Returns the time from seconds to the same format string as seen on the homepage.
 function formatTime(time) {
     let diffInHours = time / 3600;
     hrText = Math.floor(diffInHours);
@@ -29,6 +33,7 @@ function formatTime(time) {
     return (hrText + ":" + minText + ":" + secText);
 }
 
+// Returns the needed names and their completion times from the database in an array while serving the highscore page.
 router.get('/highscores', isAuth, async (req, res) => {
     let getHighscores = await Highscore.find({}).sort({completionTime: 'asc'});
     let nameArray = [];
@@ -40,9 +45,8 @@ router.get('/highscores', isAuth, async (req, res) => {
     res.render(path.resolve('./views/highscores/highscores'), {names: nameArray, times: timeArray});
 });
 
+// Highscore post route.
 router.post('/highscore', (req, res) => {
-    console.log(req.body.name);
-    console.log(req.body.score);
     const highscore = new Highscore({
         firstName: req.body.name,
         completionTime: req.body.score

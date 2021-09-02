@@ -51,7 +51,7 @@ function initializeGame() {
     });
 
     // Shuffle the board before appending.
-    // scrambleBoard();
+    scrambleBoard();
 
     // Add click events.
     addArrowClickEvents();
@@ -62,6 +62,7 @@ function initializeGame() {
 };
 
 function scrambleBoard() {
+    // Adds all the colours to an array, shuffles that array, then appends them back to the divs.
     console.log('scrambled board');
     let colorArray = [];
     $('#blocks').children().each( (idx, div) => {

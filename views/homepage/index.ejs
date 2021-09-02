@@ -61,6 +61,7 @@
     });
 
     function scoreToSeconds() {
+        // Grab value of the stopwatch and parse it to seconds for database.
         let time = $('#stopwatch').html();
         let hour = parseInt((time.slice(0,2) * 3600));
         let mins = parseInt((time.slice(3,5) * 60));
@@ -69,20 +70,24 @@
     }
 
     function authedSubmit() {
+        // On click function of submission button if the user is authenticated.
         if (!gameSolved) {
+            // Game must be solved to submit.
             alert("You can't submit the game without completing it first!");
         }
+        // Post request information.
         $.ajax({
             url: '/highscore',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({'name': $('#name').html(), 'score': scoreToSeconds()})
         })
-        alert("Your submission has been submitted to the highscores!")
-        $('#submitButton').prop('disabled',true);
+        alert("Your submission has been submitted to the highscores!");
+        $('#submitButton').prop('disabled',true); // Disable submit button so multiple submissions cannot be made in one puzzle completion.
     }
 
     function noAuthSubmit() {
+        // On click function of submission button if the user is not authenticated.
         $('#submitButton').prop('disabled',true);
         $('#winText').fadeOut(500);
 

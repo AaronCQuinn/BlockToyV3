@@ -6,7 +6,6 @@ app.set('view engine', 'ejs');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
-const path = require('path');
 
 // Import mongoose to handle connecting to the database.
 const MongoDB = require('./database');
@@ -34,8 +33,6 @@ app.use(
         store: sessionStore,
     })
 );
-
-app.listen(5000, console.log("Server running on port 5000."));
 
 // Route imports.
 app.use(express.static('public'));
