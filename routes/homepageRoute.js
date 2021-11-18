@@ -10,6 +10,6 @@ router.get('/', (req, res) => {
     } else {
         res.render(path.resolve('./views/homepage/index'), {name: null, auth: false});
     }
-})
+});
 
 module.exports = router;

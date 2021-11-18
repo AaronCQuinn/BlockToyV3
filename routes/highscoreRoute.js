@@ -35,13 +35,16 @@ function formatTime(time) {
 
 // Returns the needed names and their completion times from the database in an array while serving the highscore page.
 router.get('/highscores', isAuth, async (req, res) => {
-    let getHighscores = await Highscore.find({}).sort({completionTime: 'asc'});
     let nameArray = [];
     let timeArray = [];
-       for (let i = 0; i < getHighscores.length; i++) {
-            nameArray.push(getHighscores[i].firstName);
-            timeArray.push(formatTime(getHighscores[i].completionTime));
-       };
+    let getHighscores = await Highscore.find().sort({completionTime: 'asc'})
+    .then((result) => {
+        console.log(result);
+        for (let i = 0; i < result.length; i++) {
+                nameArray.push(result[i].firstName);
+                timeArray.push(formatTime(result[i].completionTime));
+        };
+    })
     res.render(path.resolve('./views/highscores/highscores'), {names: nameArray, times: timeArray});
 });
 

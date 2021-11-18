@@ -37,3 +37,5 @@ app.use(
 // Route imports.
 app.use(express.static('public'));
 app.use(homepageRoute, highscoreRoute, loginRoute, registrationRoute);
+
+app.listen(5000);

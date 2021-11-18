@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    <% if (message.length > 0) { %>
+    <% if (message.length > 0) /* Test != null */ { %>
         <div id="registration-fail-message">
             <%= message %>
         </div>

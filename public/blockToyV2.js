@@ -51,7 +51,7 @@ function initializeGame() {
     });
 
     // Shuffle the board before appending.
-    scrambleBoard();
+    // scrambleBoard();
 
     // Add click events.
     addArrowClickEvents();
